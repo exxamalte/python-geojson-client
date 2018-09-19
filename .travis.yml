@@ -9,6 +9,9 @@ matrix:
       env: TOXENV=py35
     - python: "3.6"
       env: TOXENV=py36
+    - python: "3.6"
+      env: TOXENV=cov
+      after_success: coveralls
 
 install: pip install -U tox coveralls
 script: travis_wait 30 tox
