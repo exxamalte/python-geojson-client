@@ -26,7 +26,7 @@ class TestGenericFeed(unittest.TestCase):
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
-        assert len(entries) == 4
+        assert len(entries) == 5
 
         feed_entry = entries[0]
         assert feed_entry.title == "Title 1"
@@ -46,6 +46,10 @@ class TestGenericFeed(unittest.TestCase):
         self.assertIsNone(feed_entry.title)
         assert feed_entry.external_id == -7266545992534134585
 
+        feed_entry = entries[4]
+        assert feed_entry.title == "Title 5"
+        assert feed_entry.external_id == "7890"
+
     @mock.patch("requests.Request")
     @mock.patch("requests.Session")
     def test_update_ok_with_filtering(self, mock_session, mock_request):
@@ -60,7 +64,7 @@ class TestGenericFeed(unittest.TestCase):
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
-        assert len(entries) == 3
+        assert len(entries) == 4
         self.assertAlmostEqual(entries[0].distance_to_home, 82.0, 1)
         self.assertAlmostEqual(entries[1].distance_to_home, 77.0, 1)
         self.assertAlmostEqual(entries[2].distance_to_home, 84.6, 1)

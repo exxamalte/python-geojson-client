@@ -51,6 +51,20 @@
           -37.8901
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.5678,
+          -37.6789
+        ]
+      },
+      "properties": {
+        "title": "Title 5"
+      },
+      "id": "7890"
     }
   ]
 }

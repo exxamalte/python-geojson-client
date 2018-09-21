@@ -1,0 +1,55 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1234,
+          -37.2345
+        ]
+      },
+      "properties": {
+        "title": "Title 1",
+        "category": "Category 1",
+        "guid": "1234",
+        "pubDate": "21/09/2018 6:30:00 AM",
+        "description": "ALERT LEVEL: Alert Level 1 <br />LOCATION: Location 1 <br />COUNCIL AREA: Council 1 <br />STATUS: Status 1 <br />TYPE: Type 1 <br />FIRE: Yes <br />SIZE: 10 ha <br />RESPONSIBLE AGENCY: Agency 1 <br />UPDATED: 21 Sep 2018 16:45"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1234,
+          -37.2345
+        ]
+      },
+      "properties": {
+        "title": "Title 2",
+        "category": "Category 2",
+        "guid": "2345",
+        "pubDate": "21/09/2018 6:35:00 AM",
+        "description": "ALERT LEVEL: Alert Level 2 <br />LOCATION: Location 2 <br />COUNCIL AREA: Council 2 <br />STATUS: Status 2 <br />TYPE: Type 2 <br />FIRE: No <br />SIZE: 20 ha <br />RESPONSIBLE AGENCY: Agency 2 <br />UPDATED: 21 Sep 2018 16:50"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1234,
+          -37.2345
+        ]
+      },
+      "properties": {
+        "title": "Title 3",
+        "guid": "3456",
+        "pubDate": "21/09/2018 6:40:00 AM",
+        "description": "ALERT LEVEL: Alert Level 3 <br />LOCATION: Location 3 <br />COUNCIL AREA: Council 3 <br />STATUS: Status 3 <br />TYPE: Type 3 <br />FIRE: Yes <br />SIZE: 20 ha <br />RESPONSIBLE AGENCY: Agency 3 <br />UPDATED: 21 Sep 2018 16:55"
+      }
+    }
+  ]
+}
