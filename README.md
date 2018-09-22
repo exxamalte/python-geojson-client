@@ -32,7 +32,8 @@ Status Codes
 from geojson_client.generic_feed import GenericFeed
 # Home Coordinates: Latitude: -33.0, Longitude: 150.0
 # Filter radius: 5000 km
-feed = GenericFeed((-33.0, 150.0), filter_radius=5000, url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson")
+feed = GenericFeed((-33.0, 150.0), filter_radius=5000, 
+                   url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson")
 status, entries = feed.update()
 ```
 
@@ -96,6 +97,7 @@ from geojson_client.usgs_earthquake_hazards_program_feed import UsgsEarthquakeHa
 # Feed: Past Day - All Earthquakes
 # Filter radius: 500 km
 # Filter minimum magnitude: 4.0
-feed = UsgsEarthquakeHazardsProgramFeed((21.3, -157.8), 'past_day_all_earthquakes', filter_radius=500, filter_minimum_magnitude=4.0)
+feed = UsgsEarthquakeHazardsProgramFeed((21.3, -157.8), 'past_day_all_earthquakes', 
+                                        filter_radius=500, filter_minimum_magnitude=4.0)
 status, entries = feed.update()
 ```
