@@ -8,7 +8,8 @@ import logging
 
 from geojson_client import GeoJsonFeed, FeedEntry
 from geojson_client.consts import ATTR_TITLE, ATTR_PLACE, ATTR_ID, \
-    ATTR_ATTRIBUTION, ATTR_MAG, ATTR_TIME, ATTR_UPDATED, ATTR_ALERT, ATTR_TYPE
+    ATTR_ATTRIBUTION, ATTR_MAG, ATTR_TIME, ATTR_UPDATED, ATTR_ALERT, \
+    ATTR_TYPE, ATTR_STATUS
 from geojson_client.exceptions import GeoJsonException
 
 _LOGGER = logging.getLogger(__name__)
@@ -144,7 +145,7 @@ class UsgsEarthquakeHazardsProgramFeedEntry(FeedEntry):
         if updated_date:
             # Parse the date. Timestamp in microseconds from unix epoch.
             updated_date = datetime.datetime.fromtimestamp(
-                updated_date / 1000,tz=datetime.timezone.utc)
+                updated_date / 1000, tz=datetime.timezone.utc)
         return updated_date
 
     @property
@@ -156,3 +157,8 @@ class UsgsEarthquakeHazardsProgramFeedEntry(FeedEntry):
     def type(self) -> str:
         """Return the type of this entry."""
         return self._search_in_properties(ATTR_TYPE)
+
+    @property
+    def status(self) -> str:
+        """Return the status of this entry."""
+        return self._search_in_properties(ATTR_STATUS)

@@ -46,6 +46,7 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
                                  tzinfo=datetime.timezone.utc)
         assert feed_entry.alert == "Alert 1"
         assert feed_entry.type == "Type 1"
+        assert feed_entry.status == "Status 1"
         assert feed_entry.attribution == "Feed Title"
 
     @mock.patch("requests.Request")

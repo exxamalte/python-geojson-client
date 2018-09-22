@@ -13,7 +13,8 @@
         "updated": 1537605000000,
         "alert": "Alert 1",
         "type": "Type 1",
-        "title": "Title 1"
+        "title": "Title 1",
+        "status": "Status 1"
       },
       "geometry": {
         "type": "Point",
