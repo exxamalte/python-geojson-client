@@ -14,7 +14,7 @@ class GenericFeed(GeoJsonFeed):
         """Initialise this service."""
         super().__init__(home_coordinates, url, filter_radius=filter_radius)
 
-    def _new_entry(self, home_coordinates, feature):
+    def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
         return GenericFeedEntry(home_coordinates, feature)
 

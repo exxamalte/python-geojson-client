@@ -13,15 +13,12 @@ import re
 from typing import Optional
 
 from geojson_client import GeoJsonFeed, FeedEntry
-from geojson_client.consts import ATTR_GUID, ATTR_TITLE
+from geojson_client.consts import ATTR_GUID, ATTR_TITLE, ATTR_CATEGORY, \
+    ATTR_DESCRIPTION, ATTR_PUB_DATE
 
 _LOGGER = logging.getLogger(__name__)
 
 ATTRIBUTION = "State of New South Wales (NSW Rural Fire Service)"
-
-ATTR_CATEGORY = 'category'
-ATTR_DESCRIPTION = 'description'
-ATTR_PUBLICATION_DATE = 'pubDate'
 
 CUSTOM_ATTRIBUTE = 'custom_attribute'
 
@@ -50,7 +47,7 @@ class NswRuralFireServiceFeed(GeoJsonFeed):
         super().__init__(home_coordinates, URL, filter_radius=filter_radius)
         self._filter_categories = filter_categories
 
-    def _new_entry(self, home_coordinates, feature):
+    def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
         return NswRuralFireServiceFeedEntry(home_coordinates, feature)
 
@@ -94,7 +91,7 @@ class NswRuralFireServiceFeedEntry(FeedEntry):
     @property
     def publication_date(self) -> datetime:
         """Return the publication date of this entry."""
-        publication_date = self._search_in_properties(ATTR_PUBLICATION_DATE)
+        publication_date = self._search_in_properties(ATTR_PUB_DATE)
         if publication_date:
             # Parse the date. Example: 15/09/2018 9:31:00 AM
             date_struct = strptime(publication_date, "%d/%m/%Y %I:%M:%S %p")

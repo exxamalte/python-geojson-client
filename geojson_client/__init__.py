@@ -28,7 +28,7 @@ class GeoJsonFeed:
         self._filter_radius = filter_radius
         self._request = requests.Request(method="GET", url=url).prepare()
 
-    def _new_entry(self, home_coordinates, feature):
+    def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
         pass
 
@@ -38,10 +38,11 @@ class GeoJsonFeed:
         if status == UPDATE_OK:
             if data:
                 entries = []
-                # Extract data from feed.
+                global_data = self._extract_from_feed(data)
+                # Extract data from feed entries.
                 for feature in data.features:
                     entries.append(self._new_entry(self._home_coordinates,
-                                                   feature))
+                                                   feature, global_data))
                 return UPDATE_OK, self._filter_entries(entries)
             else:
                 # Should not happen.
@@ -82,6 +83,10 @@ class GeoJsonFeed:
                                entry.distance_to_home <= self._filter_radius,
                                entries))
         return entries
+
+    def _extract_from_feed(self, feed):
+        """Extract global metadata from feed."""
+        return None
 
 
 class FeedEntry:

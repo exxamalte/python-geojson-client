@@ -1,0 +1,72 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "Feed Title"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 3,
+        "place": "Place 1",
+        "time": 1537603200000,
+        "updated": 1537605000000,
+        "alert": "Alert 1",
+        "type": "Type 1",
+        "title": "Title 1",
+        "status": "Status 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1234,
+          -32.2345,
+          0.1
+        ]
+      },
+      "id": "1234"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 1.25,
+        "place": "Place 2",
+        "time": 1537603200000,
+        "updated": 1537605000000,
+        "alert": "Alert 2",
+        "type": "Type 2",
+        "title": "Title 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1234,
+          -32.2345,
+          0.1
+        ]
+      },
+      "id": "2345"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": null,
+        "place": "Place 3",
+        "time": 1537603200000,
+        "updated": 1537605000000,
+        "alert": "Alert 3",
+        "type": "Type 3",
+        "title": "Title 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          149.1234,
+          -32.2345,
+          0.1
+        ]
+      },
+      "id": "3456"
+    }
+  ]
+}
