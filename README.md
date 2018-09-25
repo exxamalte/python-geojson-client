@@ -31,8 +31,8 @@ Status Codes
 ```python
 from geojson_client.generic_feed import GenericFeed
 # Home Coordinates: Latitude: -33.0, Longitude: 150.0
-# Filter radius: 5000 km
-feed = GenericFeed((-33.0, 150.0), filter_radius=5000, 
+# Filter radius: 500 km
+feed = GenericFeed((-33.0, 150.0), filter_radius=500, 
                    url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson")
 status, entries = feed.update()
 ```
