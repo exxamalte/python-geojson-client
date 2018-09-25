@@ -26,7 +26,14 @@ class GeoJsonFeed:
         """Initialise this service."""
         self._home_coordinates = home_coordinates
         self._filter_radius = filter_radius
+        self._url = url
         self._request = requests.Request(method="GET", url=url).prepare()
+
+    def __repr__(self):
+        """Return string representation of this feed."""
+        return '<{}(home={}, url={}, radius={})>'.format(
+            self.__class__.__name__, self._home_coordinates, self._url,
+            self._filter_radius)
 
     def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
@@ -96,6 +103,10 @@ class FeedEntry:
         """Initialise this feed entry."""
         self._home_coordinates = home_coordinates
         self._feature = feature
+
+    def __repr__(self):
+        """Return string representation of this entry."""
+        return '<{}(id={})>'.format(self.__class__.__name__, self.external_id)
 
     @property
     def geometry(self):
@@ -201,7 +212,7 @@ class GeoJsonDistanceHelper:
 
     @staticmethod
     def _distance_to_point(home_coordinates, point):
-        """Calculate the distance between HA and the provided point."""
+        """Calculate the distance between home coordinates and the point."""
         # Swap coordinates to match: (latitude, longitude).
         return GeoJsonDistanceHelper._distance_to_coordinates(
             home_coordinates, (point.coordinates[1], point.coordinates[0]))
@@ -209,7 +220,8 @@ class GeoJsonDistanceHelper:
     @staticmethod
     def _distance_to_geometry_collection(home_coordinates,
                                          geometry_collection):
-        """Calculate the distance between HA and the provided geometries."""
+        """Calculate the distance between home coordinates and the geometry
+        collection."""
         distance = float("inf")
         for geometry in geometry_collection.geometries:
             distance = min(distance,
@@ -219,7 +231,7 @@ class GeoJsonDistanceHelper:
 
     @staticmethod
     def _distance_to_polygon(home_coordinates, polygon):
-        """Calculate the distance between HA and the provided polygon."""
+        """Calculate the distance between home coordinates and the polygon."""
         distance = float("inf")
         # Calculate distance from polygon by calculating the distance
         # to each point of the polygon but not to each edge of the
@@ -233,6 +245,7 @@ class GeoJsonDistanceHelper:
 
     @staticmethod
     def _distance_to_coordinates(home_coordinates, coordinates):
-        """Calculate the distance between HA and the provided coordinates."""
+        """Calculate the distance between home coordinates and the
+        coordinates."""
         # Expecting coordinates in format: (latitude, longitude).
         return haversine(coordinates, home_coordinates)

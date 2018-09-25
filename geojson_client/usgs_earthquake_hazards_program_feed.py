@@ -61,6 +61,12 @@ class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
                                    URLS.keys())
         self._filter_minimum_magnitude = filter_minimum_magnitude
 
+    def __repr__(self):
+        """Return string representation of this feed."""
+        return '<{}(home={}, url={}, radius={}, magnitude={})>'.format(
+            self.__class__.__name__, self._home_coordinates, self._url,
+            self._filter_radius, self._filter_minimum_magnitude)
+
     def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
         attribution = None if not global_data and ATTR_ATTRIBUTION not in \
