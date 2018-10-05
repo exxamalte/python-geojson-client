@@ -74,7 +74,7 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
         assert feed_entry.external_id == "1234"
 
     def test_update_wrong_feed(self):
-        """Test updating feed is ok."""
+        """Test invalid feed name."""
         home_coordinates = (-31.0, 151.0)
 
         with self.assertRaises(GeoJsonException):
