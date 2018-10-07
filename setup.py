@@ -21,7 +21,9 @@ setup(
     url="https://github.com/exxamalte/python-geojson-client",
     packages=find_packages(),
     classifiers=[
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
