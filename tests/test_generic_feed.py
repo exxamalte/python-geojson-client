@@ -23,6 +23,8 @@ class TestGenericFeed(unittest.TestCase):
             .return_value.text = load_fixture('generic_feed.json')
 
         feed = GenericFeed(home_coordinates, None)
+        assert repr(feed) == "<GenericFeed(home=(-31.0, 151.0), url=None, " \
+                             "radius=None)>"
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
@@ -33,6 +35,7 @@ class TestGenericFeed(unittest.TestCase):
         assert feed_entry.external_id == "3456"
         assert feed_entry.coordinates == (-37.2345, 149.1234)
         self.assertAlmostEqual(feed_entry.distance_to_home, 714.4, 1)
+        assert repr(feed_entry) == "<GenericFeedEntry(id=3456)>"
 
         feed_entry = entries[1]
         assert feed_entry.title == "Title 2"

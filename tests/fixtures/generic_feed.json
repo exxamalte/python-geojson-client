@@ -65,6 +65,13 @@
         "title": "Title 5"
       },
       "id": "7890"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Title 6"
+      },
+      "id": "8901"
     }
   ]
 }
