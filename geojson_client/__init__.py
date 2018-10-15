@@ -85,11 +85,19 @@ class GeoJsonFeed:
 
     def _filter_entries(self, entries):
         """Filter the provided entries."""
+        filtered_entries = entries
+        # Always remove entries without geometry
+        filtered_entries = list(
+            filter(lambda entry:
+                   entry.geometry is not None,
+                   filtered_entries))
+        # Filter by distance.
         if self._filter_radius:
-            return list(filter(lambda entry:
-                               entry.distance_to_home <= self._filter_radius,
-                               entries))
-        return entries
+            filtered_entries = list(
+                filter(lambda entry:
+                       entry.distance_to_home <= self._filter_radius,
+                       filtered_entries))
+        return filtered_entries
 
     def _extract_from_feed(self, feed):
         """Extract global metadata from feed."""
