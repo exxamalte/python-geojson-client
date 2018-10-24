@@ -5,7 +5,7 @@ from unittest import mock
 
 from geojson_client import UPDATE_OK
 from geojson_client.nsw_rural_fire_service_feed import \
-    NswRuralFireServiceFeed, ATTRIBUTION
+    NswRuralFireServiceFeed, ATTRIBUTION, NswRuralFireServiceFeedManager
 from tests.utils import load_fixture
 
 
@@ -24,6 +24,11 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
             load_fixture('nsw_rural_fire_service_feed.json')
 
         feed = NswRuralFireServiceFeed(home_coordinates, None)
+        assert repr(feed) == "<NswRuralFireServiceFeed(" \
+                             "home=(-31.0, 151.0), " \
+                             "url=http://www.rfs.nsw.gov.au/feeds/" \
+                             "majorIncidents.json, radius=None, " \
+                             "categories=None)>"
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
@@ -77,3 +82,50 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         feed_entry = entries[0]
         assert feed_entry.title == "Title 1"
         assert feed_entry.category == "Category 1"
+
+    @mock.patch("requests.Request")
+    @mock.patch("requests.Session")
+    def test_feed_manager(self, mock_session, mock_request):
+        """Test the feed manager."""
+        home_coordinates = (-31.0, 151.0)
+        mock_session.return_value.__enter__.return_value.send\
+            .return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send\
+            .return_value.text = load_fixture(
+                'nsw_rural_fire_service_feed.json')
+
+        # This will just record calls and keep track of external ids.
+        generated_entity_external_ids = []
+        updated_entity_external_ids = []
+        removed_entity_external_ids = []
+
+        def _generate_entity(external_id):
+            """Generate new entity."""
+            generated_entity_external_ids.append(external_id)
+
+        def _update_entity(external_id):
+            """Update entity."""
+            updated_entity_external_ids.append(external_id)
+
+        def _remove_entity(external_id):
+            """Remove entity."""
+            removed_entity_external_ids.append(external_id)
+
+        feed_manager = NswRuralFireServiceFeedManager(_generate_entity,
+                                                      _update_entity,
+                                                      _remove_entity,
+                                                      home_coordinates,
+                                                      None)
+        assert repr(feed_manager) == "<NswRuralFireServiceFeedManager(" \
+                                     "feed=<NswRuralFireServiceFeed(" \
+                                     "home=(-31.0, 151.0), " \
+                                     "url=http://www.rfs.nsw.gov.au/feeds/" \
+                                     "majorIncidents.json, radius=None, " \
+                                     "categories=None)>)>"
+        feed_manager.update()
+        entries = feed_manager.feed_entries
+        self.assertIsNotNone(entries)
+        assert len(entries) == 3
+        assert len(generated_entity_external_ids) == 3
+        assert len(updated_entity_external_ids) == 0
+        assert len(removed_entity_external_ids) == 0

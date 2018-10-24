@@ -55,6 +55,9 @@ class FeedManagerBase:
                 "Update not successful, no data received from %s", self._feed)
             # Remove all entities.
             self._remove_entities(self._managed_external_ids.copy())
+            # Remove all feed entries and managed external ids.
+            self.feed_entries.clear()
+            self._managed_external_ids.clear()
 
     def _generate_new_entities(self, external_ids):
         """Generate new entities for events."""

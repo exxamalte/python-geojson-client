@@ -111,7 +111,7 @@ class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
     @staticmethod
     def _search_in_metadata(feed, name):
         """Find an attribute in the metadata object."""
-        if feed and feed.metadata and name in feed.metadata:
+        if feed and 'metadata' in feed and name in feed.metadata:
             return feed.metadata[name]
         return None
 
