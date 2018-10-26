@@ -28,6 +28,7 @@ class GeoJsonFeed:
         self._filter_radius = filter_radius
         self._url = url
         self._request = requests.Request(method="GET", url=url).prepare()
+        self._last_timestamp = None
 
     def __repr__(self):
         """Return string representation of this feed."""
@@ -50,7 +51,9 @@ class GeoJsonFeed:
                 for feature in data.features:
                     entries.append(self._new_entry(self._home_coordinates,
                                                    feature, global_data))
-                return UPDATE_OK, self._filter_entries(entries)
+                filtered_entries = self._filter_entries(entries)
+                self._last_timestamp = self._extract_last_timestamp(filtered_entries)
+                return UPDATE_OK, filtered_entries
             else:
                 # Should not happen.
                 return UPDATE_OK, None
@@ -101,6 +104,10 @@ class GeoJsonFeed:
 
     def _extract_from_feed(self, feed):
         """Extract global metadata from feed."""
+        return None
+
+    def _extract_last_timestamp(self, feed_entries):
+        """Determine latest (newest) entry from the filtered feed."""
         return None
 
 
