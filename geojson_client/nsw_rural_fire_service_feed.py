@@ -80,6 +80,14 @@ class NswRuralFireServiceFeed(GeoJsonFeed):
                                entries))
         return entries
 
+    def _extract_last_timestamp(self, feed_entries):
+        """Determine latest (newest) entry from the filtered feed."""
+        if feed_entries:
+            dates = sorted([entry.publication_date for entry in feed_entries],
+                           reverse=True)
+            return dates[0]
+        return None
+
 
 class NswRuralFireServiceFeedEntry(FeedEntry):
     """NSW Rural Fire Service feed entry."""

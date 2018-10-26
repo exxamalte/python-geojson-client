@@ -14,7 +14,7 @@ class FeedManagerBase:
     """Generic Feed manager."""
 
     def __init__(self, feed, generate_callback, update_callback,
-                 remove_callback):
+                 remove_callback, persistent_timestamp=False):
         """Initialise feed manager."""
         self._feed = feed
         self.feed_entries = {}
@@ -22,6 +22,7 @@ class FeedManagerBase:
         self._generate_callback = generate_callback
         self._update_callback = update_callback
         self._remove_callback = remove_callback
+        self._persistent_timestamp = persistent_timestamp
 
     def __repr__(self):
         """Return string representation of this feed."""

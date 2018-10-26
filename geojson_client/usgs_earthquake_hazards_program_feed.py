@@ -100,6 +100,14 @@ class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
                                _filter_minimum_magnitude, entries))
         return entries
 
+    def _extract_last_timestamp(self, feed_entries):
+        """Determine latest (newest) entry from the filtered feed."""
+        if feed_entries:
+            dates = sorted([entry.updated for entry in feed_entries],
+                           reverse=True)
+            return dates[0]
+        return None
+
     def _extract_from_feed(self, feed):
         """Extract global metadata from feed."""
         global_data = {}
