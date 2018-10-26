@@ -15,6 +15,7 @@ from typing import Optional
 from geojson_client import GeoJsonFeed, FeedEntry
 from geojson_client.consts import ATTR_GUID, ATTR_TITLE, ATTR_CATEGORY, \
     ATTR_DESCRIPTION, ATTR_PUB_DATE
+from geojson_client.feed_manager import FeedManagerBase
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,6 +37,19 @@ URL = "http://www.rfs.nsw.gov.au/feeds/majorIncidents.json"
 
 VALID_CATEGORIES = ['Emergency Warning', 'Watch and Act', 'Advice',
                     'Not Applicable']
+
+
+class NswRuralFireServiceFeedManager(FeedManagerBase):
+    """Feed Manager for NSW Rural Fire Services feed."""
+
+    def __init__(self, generate_callback, update_callback, remove_callback,
+                 coordinates, filter_radius=None, filter_categories=None):
+        """Initialize the NSW Rural Fire Services Feed Manager."""
+        feed = NswRuralFireServiceFeed(coordinates,
+                                       filter_radius=filter_radius,
+                                       filter_categories=filter_categories)
+        super().__init__(feed, generate_callback, update_callback,
+                         remove_callback)
 
 
 class NswRuralFireServiceFeed(GeoJsonFeed):

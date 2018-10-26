@@ -5,6 +5,18 @@ Support for generic GeoJSON feeds from various sources.
 """
 from geojson_client import GeoJsonFeed, FeedEntry
 from geojson_client.consts import ATTR_GUID, ATTR_ID, ATTR_TITLE
+from geojson_client.feed_manager import FeedManagerBase
+
+
+class GenericFeedManager(FeedManagerBase):
+    """Feed Manager for GeoJSON feeds."""
+
+    def __init__(self, generate_callback, update_callback, remove_callback,
+                 coordinates, url, filter_radius=None):
+        """Initialize the Generic Feed Manager."""
+        feed = GenericFeed(coordinates, url, filter_radius=filter_radius)
+        super().__init__(feed, generate_callback, update_callback,
+                         remove_callback)
 
 
 class GenericFeed(GeoJsonFeed):

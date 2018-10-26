@@ -11,6 +11,7 @@ from geojson_client.consts import ATTR_TITLE, ATTR_PLACE, ATTR_ID, \
     ATTR_ATTRIBUTION, ATTR_MAG, ATTR_TIME, ATTR_UPDATED, ATTR_ALERT, \
     ATTR_TYPE, ATTR_STATUS
 from geojson_client.exceptions import GeoJsonException
+from geojson_client.feed_manager import FeedManagerBase
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,17 +47,31 @@ URLS = {
 }
 
 
+class UsgsEarthquakeHazardsProgramFeedManager(FeedManagerBase):
+    """Feed Manager for USGS Earthquake Hazards Program feed."""
+
+    def __init__(self, generate_callback, update_callback, remove_callback,
+                 coordinates, feed_type, filter_radius=None,
+                 filter_minimum_magnitude=None):
+        """Initialize the USGS Earthquake Hazards Program Feed Manager."""
+        feed = UsgsEarthquakeHazardsProgramFeed(
+            coordinates, feed_type, filter_radius=filter_radius,
+            filter_minimum_magnitude=filter_minimum_magnitude)
+        super().__init__(feed, generate_callback, update_callback,
+                         remove_callback)
+
+
 class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
     """USGS Earthquake Hazards Program feed."""
 
-    def __init__(self, home_coordinates, feed, filter_radius=None,
+    def __init__(self, home_coordinates, feed_type, filter_radius=None,
                  filter_minimum_magnitude=None):
         """Initialise this service."""
-        if feed in URLS:
-            super().__init__(home_coordinates, URLS[feed],
+        if feed_type in URLS:
+            super().__init__(home_coordinates, URLS[feed_type],
                              filter_radius=filter_radius)
         else:
-            _LOGGER.error("Unknown feed category %s", feed)
+            _LOGGER.error("Unknown feed category %s", feed_type)
             raise GeoJsonException("Feed category must be one of %s" %
                                    URLS.keys())
         self._filter_minimum_magnitude = filter_minimum_magnitude
@@ -96,7 +111,7 @@ class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
     @staticmethod
     def _search_in_metadata(feed, name):
         """Find an attribute in the metadata object."""
-        if feed and feed.metadata and name in feed.metadata:
+        if feed and 'metadata' in feed and name in feed.metadata:
             return feed.metadata[name]
         return None
 
