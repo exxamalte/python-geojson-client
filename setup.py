@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 REQUIRES = [
     'geojson==2.4.0',
-    'haversine==0.4.5',
+    'haversine==1.0.1',
     'pytz>=2018.04',
-    'requests==2.19.1',
+    'requests==2.20.0',
 ]
 
 setup(
