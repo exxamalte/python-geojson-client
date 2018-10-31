@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3 (01/11/2018)
+* Simple Feed Manager for all feeds added.
+* Feed update extracts timestamp in preparation for more sophisticated feed management.
+* Third-party library updates.
+
 ## 0.2 (15/10/2018)
 * Support for U.S. Geological Survey Earthquake Hazards Program feed.
 * Filter out entries without any geo location data.

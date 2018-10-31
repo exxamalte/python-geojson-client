@@ -12,7 +12,7 @@ REQUIRES = [
 
 setup(
     name="geojson_client",
-    version="0.2",
+    version="0.3",
     author="Malte Franken",
     author_email="coding@subspace.de",
     description="A GeoJSON client library.",
