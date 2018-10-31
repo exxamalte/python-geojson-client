@@ -4,10 +4,10 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 REQUIRES = [
-    'geojson==2.4.0',
-    'haversine==1.0.1',
+    'geojson>=2.4.0',
+    'haversine>=1.0.1',
     'pytz>=2018.04',
-    'requests==2.20.0',
+    'requests>=2.20.0',
 ]
 
 setup(
