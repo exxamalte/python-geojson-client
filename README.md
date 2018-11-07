@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/exxamalte/python-geojson-client.svg)](https://travis-ci.org/exxamalte/python-geojson-client)
 [![Coverage Status](https://coveralls.io/repos/github/exxamalte/python-geojson-client/badge.svg?branch=master)](https://coveralls.io/github/exxamalte/python-geojson-client?branch=master)
+[![PyPi](https://img.shields.io/pypi/v/geojson-client.svg)](https://pypi.python.org/pypi/geojson-client)
+[![Version](https://img.shields.io/pypi/pyversions/geojson-client.svg)](https://pypi.python.org/pypi/geojson-client)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8c87f480c5043a8599df/maintainability)](https://codeclimate.com/github/exxamalte/python-geojson-client/maintainability)
 
 This library provides convenient access to [GeoJSON](https://tools.ietf.org/html/rfc7946) Feeds.
 
