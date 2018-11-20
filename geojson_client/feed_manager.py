@@ -3,7 +3,9 @@ Base class for the feed manager.
 
 This allows managing feeds and their entries throughout their life-cycle.
 """
+from datetime import datetime
 import logging
+from typing import Optional
 
 from geojson_client import UPDATE_OK, UPDATE_OK_NO_DATA
 
@@ -14,15 +16,15 @@ class FeedManagerBase:
     """Generic Feed manager."""
 
     def __init__(self, feed, generate_callback, update_callback,
-                 remove_callback, persistent_timestamp=False):
+                 remove_callback):
         """Initialise feed manager."""
         self._feed = feed
         self.feed_entries = {}
         self._managed_external_ids = set()
+        self._last_update = None
         self._generate_callback = generate_callback
         self._update_callback = update_callback
         self._remove_callback = remove_callback
-        self._persistent_timestamp = persistent_timestamp
 
     def __repr__(self):
         """Return string representation of this feed."""
@@ -37,6 +39,8 @@ class FeedManagerBase:
             # Keep a copy of all feed entries for future lookups by entities.
             self.feed_entries = {entry.external_id: entry
                                  for entry in feed_entries}
+            # Record current time of update.
+            self._last_update = datetime.now()
             # For entity management the external ids from the feed are used.
             feed_external_ids = set(self.feed_entries)
             remove_external_ids = self._managed_external_ids.difference(
@@ -79,3 +83,13 @@ class FeedManagerBase:
             _LOGGER.debug("Entity not current anymore %s", external_id)
             self._managed_external_ids.remove(external_id)
             self._remove_callback(external_id)
+
+    @property
+    def last_timestamp(self) -> Optional[datetime]:
+        """Return the last timestamp extracted from this feed."""
+        return self._feed.last_timestamp
+
+    @property
+    def last_update(self) -> Optional[datetime]:
+        """Return the last successful update of this feed."""
+        return self._last_update

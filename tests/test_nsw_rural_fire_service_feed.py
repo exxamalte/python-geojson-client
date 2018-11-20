@@ -3,7 +3,7 @@ import datetime
 import unittest
 from unittest import mock
 
-from geojson_client import UPDATE_OK
+from geojson_client import UPDATE_OK, UPDATE_ERROR
 from geojson_client.nsw_rural_fire_service_feed import \
     NswRuralFireServiceFeed, ATTRIBUTION, NswRuralFireServiceFeedManager
 from tests.utils import load_fixture
@@ -33,6 +33,9 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
         assert len(entries) == 3
+        assert feed.last_timestamp \
+            == datetime.datetime(2018, 9, 21, 6, 40,
+                                 tzinfo=datetime.timezone.utc)
 
         feed_entry = entries[0]
         assert feed_entry.title == "Title 1"
@@ -126,6 +129,9 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         entries = feed_manager.feed_entries
         self.assertIsNotNone(entries)
         assert len(entries) == 3
+        assert feed_manager.last_timestamp \
+            == datetime.datetime(2018, 9, 21, 6, 40,
+                                 tzinfo=datetime.timezone.utc)
         assert len(generated_entity_external_ids) == 3
         assert len(updated_entity_external_ids) == 0
         assert len(removed_entity_external_ids) == 0

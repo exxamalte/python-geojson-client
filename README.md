@@ -104,3 +104,34 @@ feed = UsgsEarthquakeHazardsProgramFeed((21.3, -157.8), 'past_day_all_earthquake
                                         filter_radius=500, filter_minimum_magnitude=4.0)
 status, entries = feed.update()
 ```
+
+## Feed Managers
+
+The Feed Managers help managing feed updates over time, by notifying the 
+consumer of the feed about new feed entries, updates and removed entries 
+compared to the last feed update.
+
+* If the current feed update is the first one, then all feed entries will be 
+  reported as new. The feed manager will keep track of all feed entries' 
+  external IDs that it has successfully processed.
+* If the current feed update is not the first one, then the feed manager will 
+  produce three sets:
+  * Feed entries that were not in the previous feed update but are in the 
+    current feed update will be reported as new.
+  * Feed entries that were in the previous feed update and are still in the 
+    current feed update will be reported as to be updated.
+  * Feed entries that were in the previous feed update but are not in the 
+    current feed update will be reported to be removed.
+* If the current update fails, then all feed entries processed in the previous
+  feed update will be reported to be removed.
+
+After a successful update from the feed, the feed manager will provide two
+different dates:
+
+* `last_update` will be the timestamp of the last successful update from the
+  feed. This date may be useful if the consumer of this library wants to
+  treat intermittent errors from feed updates differently.
+* `last_timestamp` will be the latest timestamp extracted from the feed data. 
+  This requires that the underlying feed data actually contains a suitable 
+  date. This date may be useful if the consumer of this library wants to 
+  process feed entries differently if they haven't actually been updated.

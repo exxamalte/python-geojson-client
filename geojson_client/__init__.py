@@ -3,6 +3,7 @@ Base class for GeoJSON services.
 
 Fetches GeoJSON feed from URL to be defined by sub-class.
 """
+from datetime import datetime
 import geojson
 import logging
 
@@ -52,7 +53,8 @@ class GeoJsonFeed:
                     entries.append(self._new_entry(self._home_coordinates,
                                                    feature, global_data))
                 filtered_entries = self._filter_entries(entries)
-                self._last_timestamp = self._extract_last_timestamp(filtered_entries)
+                self._last_timestamp = self._extract_last_timestamp(
+                    filtered_entries)
                 return UPDATE_OK, filtered_entries
             else:
                 # Should not happen.
@@ -109,6 +111,11 @@ class GeoJsonFeed:
     def _extract_last_timestamp(self, feed_entries):
         """Determine latest (newest) entry from the filtered feed."""
         return None
+
+    @property
+    def last_timestamp(self) -> Optional[datetime]:
+        """Return the last timestamp extracted from this feed."""
+        return self._last_timestamp
 
 
 class FeedEntry:

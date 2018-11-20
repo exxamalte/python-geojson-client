@@ -83,6 +83,7 @@ class TestGenericFeed(unittest.TestCase):
         feed = GenericFeed(home_coordinates, None)
         status, entries = feed.update()
         assert status == UPDATE_ERROR
+        self.assertIsNone(feed.last_timestamp)
 
     @mock.patch("requests.Request")
     @mock.patch("requests.Session")
@@ -147,6 +148,8 @@ class TestGenericFeed(unittest.TestCase):
         entries = feed_manager.feed_entries
         self.assertIsNotNone(entries)
         assert len(entries) == 5
+        self.assertIsNotNone(feed_manager.last_update)
+
         assert len(generated_entity_external_ids) == 5
         assert len(updated_entity_external_ids) == 0
         assert len(removed_entity_external_ids) == 0
