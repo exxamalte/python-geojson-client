@@ -33,7 +33,7 @@ REGEXP_ATTR_SIZE = 'SIZE: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
 REGEXP_ATTR_STATUS = 'STATUS: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
 REGEXP_ATTR_TYPE = 'TYPE: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
 
-URL = "http://www.rfs.nsw.gov.au/feeds/majorIncidents.json"
+URL = "https://www.rfs.nsw.gov.au/feeds/majorIncidents.json"
 
 VALID_CATEGORIES = ['Emergency Warning', 'Watch and Act', 'Advice',
                     'Not Applicable']

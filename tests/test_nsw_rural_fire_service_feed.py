@@ -26,7 +26,7 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         feed = NswRuralFireServiceFeed(home_coordinates, None)
         assert repr(feed) == "<NswRuralFireServiceFeed(" \
                              "home=(-31.0, 151.0), " \
-                             "url=http://www.rfs.nsw.gov.au/feeds/" \
+                             "url=https://www.rfs.nsw.gov.au/feeds/" \
                              "majorIncidents.json, radius=None, " \
                              "categories=None)>"
         status, entries = feed.update()
@@ -119,7 +119,7 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         assert repr(feed_manager) == "<NswRuralFireServiceFeedManager(" \
                                      "feed=<NswRuralFireServiceFeed(" \
                                      "home=(-31.0, 151.0), " \
-                                     "url=http://www.rfs.nsw.gov.au/feeds/" \
+                                     "url=https://www.rfs.nsw.gov.au/feeds/" \
                                      "majorIncidents.json, radius=None, " \
                                      "categories=None)>)>"
         feed_manager.update()
