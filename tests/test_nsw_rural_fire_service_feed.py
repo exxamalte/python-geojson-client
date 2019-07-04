@@ -2,10 +2,12 @@
 import datetime
 import unittest
 from unittest import mock
+from unittest.mock import MagicMock
 
 from geojson_client import UPDATE_OK
 from geojson_client.nsw_rural_fire_service_feed import \
-    NswRuralFireServiceFeed, ATTRIBUTION, NswRuralFireServiceFeedManager
+    NswRuralFireServiceFeed, ATTRIBUTION, NswRuralFireServiceFeedManager, \
+    NswRuralFireServiceFeedEntry
 from tests.utils import load_fixture
 
 
@@ -33,6 +35,9 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
         assert len(entries) == 3
+        assert feed.last_timestamp \
+            == datetime.datetime(2018, 9, 21, 6, 40,
+                                 tzinfo=datetime.timezone.utc)
 
         feed_entry = entries[0]
         assert feed_entry.title == "Title 1"
@@ -126,6 +131,43 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         entries = feed_manager.feed_entries
         self.assertIsNotNone(entries)
         assert len(entries) == 3
+        assert feed_manager.last_timestamp \
+            == datetime.datetime(2018, 9, 21, 6, 40,
+                                 tzinfo=datetime.timezone.utc)
         assert len(generated_entity_external_ids) == 3
         assert len(updated_entity_external_ids) == 0
         assert len(removed_entity_external_ids) == 0
+
+    def test_last_timestamp_empty(self):
+        """Test last timestamp."""
+        feed = NswRuralFireServiceFeed(None)
+
+        # Entries are None.
+        last_timestamp = feed._extract_last_timestamp(None)
+        self.assertIsNone(last_timestamp)
+
+        # Entries are empty.
+        last_timestamp = feed._extract_last_timestamp([])
+        self.assertIsNone(last_timestamp)
+
+        # Entries contain one with None date.
+        mock_entry_1 = MagicMock(spec=NswRuralFireServiceFeedEntry)
+        mock_entry_1.publication_date = None
+        datetime_1 = datetime.datetime(2019, 7, 4, 8, 0,
+                                       tzinfo=datetime.timezone.utc)
+        mock_entry_2 = MagicMock(spec=NswRuralFireServiceFeedEntry)
+        mock_entry_2.publication_date = datetime_1
+
+        last_timestamp = feed._extract_last_timestamp([mock_entry_1,
+                                                       mock_entry_2])
+        assert last_timestamp == datetime_1
+
+        # Entries contain multiple dates.
+        datetime_2 = datetime.datetime(2019, 7, 3, 8, 0,
+                                       tzinfo=datetime.timezone.utc)
+        mock_entry_3 = MagicMock(spec=NswRuralFireServiceFeedEntry)
+        mock_entry_3.publication_date = datetime_2
+        last_timestamp = feed._extract_last_timestamp([mock_entry_3,
+                                                       mock_entry_1,
+                                                       mock_entry_2])
+        assert last_timestamp == datetime_1
