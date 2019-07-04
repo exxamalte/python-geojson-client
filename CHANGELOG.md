@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4 (05/07/2019)
+* Fetch NSW Rural Fire Service feed securely via HTTPS (thanks @davidjb).
+* Provide last timestamp from NSW Rural Fire Service feed entries.
+
 ## 0.3 (01/11/2018)
 * Simple Feed Manager for all feeds added.
 * Feed update extracts timestamp in preparation for more sophisticated feed management.
