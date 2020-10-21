@@ -1,5 +1,10 @@
 # Changes
 
+## 0.5 (21/10/2020)
+* Added Python 3.8 support.
+* Drop Python 3.5 support.
+* Excluded tests from package.
+
 ## 0.4 (05/07/2019)
 * Fetch NSW Rural Fire Service feed securely via HTTPS (thanks @davidjb).
 * Provide last timestamp from NSW Rural Fire Service feed entries.
