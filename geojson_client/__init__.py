@@ -11,7 +11,9 @@ import requests
 from geojson import Point, GeometryCollection, Polygon
 from haversine import haversine
 from json import JSONDecodeError
-from typing import Optional
+from typing import Optional, Dict, Callable, List, Tuple
+
+from geojson_client.consts import FILTER_RADIUS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +43,9 @@ class GeoJsonFeed:
         """Generate a new entry."""
         pass
 
-    def update(self):
+    def _update_internal(
+        self, filter_function: Callable[[List], List]
+    ) -> Tuple[str, Optional[List]]:
         """Update from external source and return filtered entries."""
         status, data = self._fetch()
         if status == UPDATE_OK:
@@ -52,7 +56,7 @@ class GeoJsonFeed:
                 for feature in data.features:
                     entries.append(self._new_entry(self._home_coordinates,
                                                    feature, global_data))
-                filtered_entries = self._filter_entries(entries)
+                filtered_entries = filter_function(entries)
                 self._last_timestamp = self._extract_last_timestamp(
                     filtered_entries)
                 return UPDATE_OK, filtered_entries
@@ -65,6 +69,21 @@ class GeoJsonFeed:
         else:
             # Error happened while fetching the feed.
             return UPDATE_ERROR, None
+
+    def update(self) -> Tuple[str, Optional[List]]:
+        """Update from external source and return filtered entries."""
+        return self._update_internal(
+            lambda entries: self._filter_entries(entries)
+        )
+
+    def update_override(self, filter_overrides: Dict = None) -> Tuple[str, Optional[List]]:
+        """Update from external source and return filtered entries with ability to
+        override filter conditions."""
+        return self._update_internal(
+            lambda entries: self._filter_entries_override(
+                entries, filter_overrides=filter_overrides
+            )
+        )
 
     def _fetch(self):
         """Fetch GeoJSON data from external source."""
@@ -90,6 +109,10 @@ class GeoJsonFeed:
 
     def _filter_entries(self, entries):
         """Filter the provided entries."""
+        return self._filter_entries_override(entries, None)
+
+    def _filter_entries_override(self, entries, filter_overrides: Dict = None):
+        """Filter the provided entries."""
         filtered_entries = entries
         # Always remove entries without geometry
         filtered_entries = list(
@@ -97,11 +120,18 @@ class GeoJsonFeed:
                    entry.geometry is not None,
                    filtered_entries))
         # Filter by distance.
-        if self._filter_radius:
+        filter_radius = (
+            filter_overrides[FILTER_RADIUS]
+            if filter_overrides and FILTER_RADIUS in filter_overrides
+            else self._filter_radius
+        )
+        if filter_radius:
             filtered_entries = list(
-                filter(lambda entry:
-                       entry.distance_to_home <= self._filter_radius,
-                       filtered_entries))
+                filter(
+                    lambda entry: entry.distance_to_home <= filter_radius,
+                    filtered_entries,
+                )
+            )
         return filtered_entries
 
     def _extract_from_feed(self, feed):

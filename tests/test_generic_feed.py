@@ -74,6 +74,23 @@ class TestGenericFeed(unittest.TestCase):
 
     @mock.patch("requests.Request")
     @mock.patch("requests.Session")
+    def test_update_ok_with_filtering_override(self, mock_session, mock_request):
+        """Test updating feed is ok."""
+        home_coordinates = (-37.0, 150.0)
+        mock_session.return_value.__enter__.return_value.send\
+            .return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send\
+            .return_value.text = load_fixture('generic_feed_1.json')
+
+        feed = GenericFeed(home_coordinates, None, filter_radius=90.0)
+        status, entries = feed.update_override({'radius': 80.0})
+        assert status == UPDATE_OK
+        self.assertIsNotNone(entries)
+        assert len(entries) == 1
+        self.assertAlmostEqual(entries[0].distance_to_home, 77.0, 1)
+
+    @mock.patch("requests.Request")
+    @mock.patch("requests.Session")
     def test_update_error(self, mock_session, mock_request):
         """Test updating feed results in error."""
         home_coordinates = (-31.0, 151.0)
