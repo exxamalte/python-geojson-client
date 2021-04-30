@@ -5,7 +5,7 @@ This allows managing feeds and their entries throughout their life-cycle.
 """
 from datetime import datetime
 import logging
-from typing import Optional
+from typing import Optional, Dict, List
 
 from geojson_client import UPDATE_OK, UPDATE_OK_NO_DATA
 
@@ -31,9 +31,9 @@ class FeedManagerBase:
         return '<{}(feed={})>'.format(
             self.__class__.__name__, self._feed)
 
-    def update(self):
+    def _update_internal(self, status: str, feed_entries: Optional[List]):
         """Update the feed and then update connected entities."""
-        status, feed_entries = self._feed.update()
+        # status, feed_entries = self._feed.update()
         if status == UPDATE_OK:
             _LOGGER.debug("Data retrieved %s", feed_entries)
             # Keep a copy of all feed entries for future lookups by entities.
@@ -63,6 +63,18 @@ class FeedManagerBase:
             # Remove all feed entries and managed external ids.
             self.feed_entries.clear()
             self._managed_external_ids.clear()
+
+    def update(self):
+        """Update the feed and then update connected entities."""
+        status, feed_entries = self._feed.update()
+        self._update_internal(status, feed_entries)
+
+    def update_override(self, filter_overrides: Dict = None):
+        """Update the feed and then update connected entities."""
+        status, feed_entries = self._feed.update_override(
+            filter_overrides=filter_overrides
+        )
+        self._update_internal(status, feed_entries)
 
     def _generate_new_entities(self, external_ids):
         """Generate new entities for events."""

@@ -10,11 +10,11 @@ from time import strptime
 
 import logging
 import re
-from typing import Optional
+from typing import Optional, Dict
 
 from geojson_client import GeoJsonFeed, FeedEntry
 from geojson_client.consts import ATTR_GUID, ATTR_TITLE, ATTR_CATEGORY, \
-    ATTR_DESCRIPTION, ATTR_PUB_DATE
+    ATTR_DESCRIPTION, ATTR_PUB_DATE, FILTER_CATEGORIES
 from geojson_client.feed_manager import FeedManagerBase
 
 _LOGGER = logging.getLogger(__name__)
@@ -71,12 +71,17 @@ class NswRuralFireServiceFeed(GeoJsonFeed):
         """Generate a new entry."""
         return NswRuralFireServiceFeedEntry(home_coordinates, feature)
 
-    def _filter_entries(self, entries):
+    def _filter_entries_override(self, entries, filter_overrides: Dict = None):
         """Filter the provided entries."""
-        entries = super()._filter_entries(entries)
-        if self._filter_categories:
+        entries = super()._filter_entries_override(entries)
+        filter_categories = (
+            filter_overrides[FILTER_CATEGORIES]
+            if filter_overrides and FILTER_CATEGORIES in filter_overrides
+            else self._filter_categories
+        )
+        if filter_categories:
             return list(filter(lambda entry:
-                               entry.category in self._filter_categories,
+                               entry.category in filter_categories,
                                entries))
         return entries
 

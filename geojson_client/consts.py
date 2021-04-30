@@ -18,3 +18,7 @@ ATTR_TIME = 'time'
 ATTR_TITLE = 'title'
 ATTR_TYPE = 'type'
 ATTR_UPDATED = 'updated'
+
+FILTER_CATEGORIES = 'categories'
+FILTER_MINIMUM_MAGNITUDE = 'minimum_magnitude'
+FILTER_RADIUS = 'radius'

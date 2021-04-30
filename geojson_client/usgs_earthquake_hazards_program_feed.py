@@ -5,11 +5,12 @@ Fetches GeoJSON feed from U.S. Geological Survey Earthquake Hazards Program.
 """
 import datetime
 import logging
+from typing import Dict
 
 from geojson_client import GeoJsonFeed, FeedEntry
 from geojson_client.consts import ATTR_TITLE, ATTR_PLACE, ATTR_ID, \
     ATTR_ATTRIBUTION, ATTR_MAG, ATTR_TIME, ATTR_UPDATED, ATTR_ALERT, \
-    ATTR_TYPE, ATTR_STATUS
+    ATTR_TYPE, ATTR_STATUS, FILTER_MINIMUM_MAGNITUDE
 from geojson_client.exceptions import GeoJsonException
 from geojson_client.feed_manager import FeedManagerBase
 
@@ -89,15 +90,20 @@ class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
         return UsgsEarthquakeHazardsProgramFeedEntry(home_coordinates,
                                                      feature, attribution)
 
-    def _filter_entries(self, entries):
+    def _filter_entries_override(self, entries, filter_overrides: Dict = None):
         """Filter the provided entries."""
-        entries = super()._filter_entries(entries)
-        if self._filter_minimum_magnitude:
+        entries = super()._filter_entries_override(entries)
+        filter_minimum_magnitude = (
+            filter_overrides[FILTER_MINIMUM_MAGNITUDE]
+            if filter_overrides and FILTER_MINIMUM_MAGNITUDE in filter_overrides
+            else self._filter_minimum_magnitude
+        )
+        if filter_minimum_magnitude:
             # Return only entries that have an actual magnitude value, and
             # the value is equal or above the defined threshold.
             return list(filter(lambda entry:
-                               entry.magnitude and entry.magnitude >= self.
-                               _filter_minimum_magnitude, entries))
+                               entry.magnitude and entry.magnitude >=
+                               filter_minimum_magnitude, entries))
         return entries
 
     def _extract_last_timestamp(self, feed_entries):
