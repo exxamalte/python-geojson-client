@@ -1,7 +1,8 @@
 """Tests for base classes."""
 import unittest
-from geojson import Point, Polygon, GeometryCollection
 from unittest.mock import MagicMock
+
+from geojson import GeometryCollection, Point, Polygon
 
 from geojson_client import GeoJsonDistanceHelper
 

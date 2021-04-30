@@ -3,22 +3,22 @@ NSW Rural Fire Service.
 
 Fetches GeoJSON feed from NSW Rural Fire Service.
 """
-import pytz
 import calendar
-from datetime import datetime
-from time import strptime
-
 import logging
 import re
-from typing import Optional, Dict
+from datetime import datetime
+from time import strptime
+from typing import Dict, Optional
 
-from geojson_client import GeoJsonFeed, FeedEntry
+import pytz
+
+from geojson_client import FeedEntry, GeoJsonFeed
 from geojson_client.consts import (
-    ATTR_GUID,
-    ATTR_TITLE,
     ATTR_CATEGORY,
     ATTR_DESCRIPTION,
+    ATTR_GUID,
     ATTR_PUB_DATE,
+    ATTR_TITLE,
     FILTER_CATEGORIES,
 )
 from geojson_client.feed_manager import FeedManagerBase

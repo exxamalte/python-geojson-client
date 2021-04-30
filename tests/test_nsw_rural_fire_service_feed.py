@@ -6,10 +6,10 @@ from unittest.mock import MagicMock
 
 from geojson_client import UPDATE_OK
 from geojson_client.nsw_rural_fire_service_feed import (
-    NswRuralFireServiceFeed,
     ATTRIBUTION,
-    NswRuralFireServiceFeedManager,
+    NswRuralFireServiceFeed,
     NswRuralFireServiceFeedEntry,
+    NswRuralFireServiceFeedManager,
 )
 from tests.utils import load_fixture
 
