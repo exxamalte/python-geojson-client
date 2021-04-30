@@ -5,8 +5,10 @@ from unittest import mock
 
 from geojson_client import UPDATE_OK
 from geojson_client.exceptions import GeoJsonException
-from geojson_client.usgs_earthquake_hazards_program_feed import \
-    UsgsEarthquakeHazardsProgramFeed, UsgsEarthquakeHazardsProgramFeedManager
+from geojson_client.usgs_earthquake_hazards_program_feed import (
+    UsgsEarthquakeHazardsProgramFeed,
+    UsgsEarthquakeHazardsProgramFeedManager,
+)
 from tests.utils import load_fixture
 
 
@@ -18,19 +20,21 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
     def test_update_ok(self, mock_session, mock_request):
         """Test updating feed is ok."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = \
-            load_fixture('usgs_earthquake_hazards_program_feed.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("usgs_earthquake_hazards_program_feed.json")
+        )
 
         feed = UsgsEarthquakeHazardsProgramFeed(
-            home_coordinates, 'past_hour_significant_earthquakes')
-        assert repr(feed) == "<UsgsEarthquakeHazardsProgramFeed(" \
-                             "home=(-31.0, 151.0), " \
-                             "url=https://earthquake.usgs.gov/earthquakes/" \
-                             "feed/v1.0/summary/significant_hour.geojson, " \
-                             "radius=None, magnitude=None)>"
+            home_coordinates, "past_hour_significant_earthquakes"
+        )
+        assert (
+            repr(feed) == "<UsgsEarthquakeHazardsProgramFeed("
+            "home=(-31.0, 151.0), "
+            "url=https://earthquake.usgs.gov/earthquakes/"
+            "feed/v1.0/summary/significant_hour.geojson, "
+            "radius=None, magnitude=None)>"
+        )
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
@@ -43,12 +47,12 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
         self.assertAlmostEqual(feed_entry.distance_to_home, 224.5, 1)
         assert feed_entry.place == "Place 1"
         assert feed_entry.magnitude == 3.0
-        assert feed_entry.time \
-            == datetime.datetime(2018, 9, 22, 8, 0,
-                                 tzinfo=datetime.timezone.utc)
-        assert feed_entry.updated \
-            == datetime.datetime(2018, 9, 22, 8, 30,
-                                 tzinfo=datetime.timezone.utc)
+        assert feed_entry.time == datetime.datetime(
+            2018, 9, 22, 8, 0, tzinfo=datetime.timezone.utc
+        )
+        assert feed_entry.updated == datetime.datetime(
+            2018, 9, 22, 8, 30, tzinfo=datetime.timezone.utc
+        )
         assert feed_entry.alert == "Alert 1"
         assert feed_entry.type == "Type 1"
         assert feed_entry.status == "Status 1"
@@ -56,19 +60,19 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
 
     @mock.patch("requests.Request")
     @mock.patch("requests.Session")
-    def test_update_ok_with_minimum_magnitude(self, mock_session,
-                                              mock_request):
+    def test_update_ok_with_minimum_magnitude(self, mock_session, mock_request):
         """Test updating feed is ok."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = \
-            load_fixture('usgs_earthquake_hazards_program_feed.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("usgs_earthquake_hazards_program_feed.json")
+        )
 
         feed = UsgsEarthquakeHazardsProgramFeed(
-            home_coordinates, 'past_hour_significant_earthquakes',
-            filter_minimum_magnitude=2.5)
+            home_coordinates,
+            "past_hour_significant_earthquakes",
+            filter_minimum_magnitude=2.5,
+        )
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
@@ -83,19 +87,17 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
         home_coordinates = (-31.0, 151.0)
 
         with self.assertRaises(GeoJsonException):
-            UsgsEarthquakeHazardsProgramFeed(home_coordinates,
-                                             'DOES NOT EXIST')
+            UsgsEarthquakeHazardsProgramFeed(home_coordinates, "DOES NOT EXIST")
 
     @mock.patch("requests.Request")
     @mock.patch("requests.Session")
     def test_feed_manager(self, mock_session, mock_request):
         """Test the feed manager."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = load_fixture(
-                'usgs_earthquake_hazards_program_feed.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("usgs_earthquake_hazards_program_feed.json")
+        )
 
         # This will just record calls and keep track of external ids.
         generated_entity_external_ids = []
@@ -115,15 +117,21 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
             removed_entity_external_ids.append(external_id)
 
         feed_manager = UsgsEarthquakeHazardsProgramFeedManager(
-            _generate_entity, _update_entity, _remove_entity,
-            home_coordinates, 'past_hour_significant_earthquakes')
-        assert repr(feed_manager) == "<UsgsEarthquakeHazardsProgramFeed" \
-                                     "Manager(feed=<UsgsEarthquakeHazards" \
-                                     "ProgramFeed(home=(-31.0, 151.0), " \
-                                     "url=https://earthquake.usgs.gov/" \
-                                     "earthquakes/feed/v1.0/summary/" \
-                                     "significant_hour.geojson, " \
-                                     "radius=None, magnitude=None)>)>"
+            _generate_entity,
+            _update_entity,
+            _remove_entity,
+            home_coordinates,
+            "past_hour_significant_earthquakes",
+        )
+        assert (
+            repr(feed_manager) == "<UsgsEarthquakeHazardsProgramFeed"
+            "Manager(feed=<UsgsEarthquakeHazards"
+            "ProgramFeed(home=(-31.0, 151.0), "
+            "url=https://earthquake.usgs.gov/"
+            "earthquakes/feed/v1.0/summary/"
+            "significant_hour.geojson, "
+            "radius=None, magnitude=None)>)>"
+        )
         feed_manager.update()
         entries = feed_manager.feed_entries
         self.assertIsNotNone(entries)
@@ -137,7 +145,7 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
         updated_entity_external_ids.clear()
         removed_entity_external_ids.clear()
 
-        feed_manager.update_override({'minimum_magnitude': 2.5})
+        feed_manager.update_override({"minimum_magnitude": 2.5})
         entries = feed_manager.feed_entries
         self.assertIsNotNone(entries)
         assert len(entries) == 1

@@ -15,8 +15,7 @@ _LOGGER = logging.getLogger(__name__)
 class FeedManagerBase:
     """Generic Feed manager."""
 
-    def __init__(self, feed, generate_callback, update_callback,
-                 remove_callback):
+    def __init__(self, feed, generate_callback, update_callback, remove_callback):
         """Initialise feed manager."""
         self._feed = feed
         self.feed_entries = {}
@@ -28,8 +27,7 @@ class FeedManagerBase:
 
     def __repr__(self):
         """Return string representation of this feed."""
-        return '<{}(feed={})>'.format(
-            self.__class__.__name__, self._feed)
+        return "<{}(feed={})>".format(self.__class__.__name__, self._feed)
 
     def _update_internal(self, status: str, feed_entries: Optional[List]):
         """Update the feed and then update connected entities."""
@@ -37,27 +35,29 @@ class FeedManagerBase:
         if status == UPDATE_OK:
             _LOGGER.debug("Data retrieved %s", feed_entries)
             # Keep a copy of all feed entries for future lookups by entities.
-            self.feed_entries = {entry.external_id: entry
-                                 for entry in feed_entries}
+            self.feed_entries = {entry.external_id: entry for entry in feed_entries}
             # Record current time of update.
             self._last_update = datetime.now()
             # For entity management the external ids from the feed are used.
             feed_external_ids = set(self.feed_entries)
             remove_external_ids = self._managed_external_ids.difference(
-                feed_external_ids)
+                feed_external_ids
+            )
             self._remove_entities(remove_external_ids)
             update_external_ids = self._managed_external_ids.intersection(
-                feed_external_ids)
+                feed_external_ids
+            )
             self._update_entities(update_external_ids)
             create_external_ids = feed_external_ids.difference(
-                self._managed_external_ids)
+                self._managed_external_ids
+            )
             self._generate_new_entities(create_external_ids)
         elif status == UPDATE_OK_NO_DATA:
-            _LOGGER.debug(
-                "Update successful, but no data received from %s", self._feed)
+            _LOGGER.debug("Update successful, but no data received from %s", self._feed)
         else:
             _LOGGER.warning(
-                "Update not successful, no data received from %s", self._feed)
+                "Update not successful, no data received from %s", self._feed
+            )
             # Remove all entities.
             self._remove_entities(self._managed_external_ids.copy())
             # Remove all feed entries and managed external ids.

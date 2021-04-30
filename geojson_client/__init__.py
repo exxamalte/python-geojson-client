@@ -17,9 +17,9 @@ from geojson_client.consts import FILTER_RADIUS
 
 _LOGGER = logging.getLogger(__name__)
 
-UPDATE_OK = 'OK'
-UPDATE_OK_NO_DATA = 'OK_NO_DATA'
-UPDATE_ERROR = 'ERROR'
+UPDATE_OK = "OK"
+UPDATE_OK_NO_DATA = "OK_NO_DATA"
+UPDATE_ERROR = "ERROR"
 
 
 class GeoJsonFeed:
@@ -35,9 +35,12 @@ class GeoJsonFeed:
 
     def __repr__(self):
         """Return string representation of this feed."""
-        return '<{}(home={}, url={}, radius={})>'.format(
-            self.__class__.__name__, self._home_coordinates, self._url,
-            self._filter_radius)
+        return "<{}(home={}, url={}, radius={})>".format(
+            self.__class__.__name__,
+            self._home_coordinates,
+            self._url,
+            self._filter_radius,
+        )
 
     def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
@@ -54,11 +57,11 @@ class GeoJsonFeed:
                 global_data = self._extract_from_feed(data)
                 # Extract data from feed entries.
                 for feature in data.features:
-                    entries.append(self._new_entry(self._home_coordinates,
-                                                   feature, global_data))
+                    entries.append(
+                        self._new_entry(self._home_coordinates, feature, global_data)
+                    )
                 filtered_entries = filter_function(entries)
-                self._last_timestamp = self._extract_last_timestamp(
-                    filtered_entries)
+                self._last_timestamp = self._extract_last_timestamp(filtered_entries)
                 return UPDATE_OK, filtered_entries
             else:
                 # Should not happen.
@@ -72,11 +75,11 @@ class GeoJsonFeed:
 
     def update(self) -> Tuple[str, Optional[List]]:
         """Update from external source and return filtered entries."""
-        return self._update_internal(
-            lambda entries: self._filter_entries(entries)
-        )
+        return self._update_internal(lambda entries: self._filter_entries(entries))
 
-    def update_override(self, filter_overrides: Dict = None) -> Tuple[str, Optional[List]]:
+    def update_override(
+        self, filter_overrides: Dict = None
+    ) -> Tuple[str, Optional[List]]:
         """Update from external source and return filtered entries with ability to
         override filter conditions."""
         return self._update_internal(
@@ -96,15 +99,19 @@ class GeoJsonFeed:
             else:
                 _LOGGER.warning(
                     "Fetching data from %s failed with status %s",
-                    self._request.url, response.status_code)
+                    self._request.url,
+                    response.status_code,
+                )
                 return UPDATE_ERROR, None
         except requests.exceptions.RequestException as request_ex:
-            _LOGGER.warning("Fetching data from %s failed with %s",
-                            self._request.url, request_ex)
+            _LOGGER.warning(
+                "Fetching data from %s failed with %s", self._request.url, request_ex
+            )
             return UPDATE_ERROR, None
         except JSONDecodeError as decode_ex:
-            _LOGGER.warning("Unable to parse JSON from %s: %s",
-                            self._request.url, decode_ex)
+            _LOGGER.warning(
+                "Unable to parse JSON from %s: %s", self._request.url, decode_ex
+            )
             return UPDATE_ERROR, None
 
     def _filter_entries(self, entries):
@@ -116,9 +123,8 @@ class GeoJsonFeed:
         filtered_entries = entries
         # Always remove entries without geometry
         filtered_entries = list(
-            filter(lambda entry:
-                   entry.geometry is not None,
-                   filtered_entries))
+            filter(lambda entry: entry.geometry is not None, filtered_entries)
+        )
         # Filter by distance.
         filter_radius = (
             filter_overrides[FILTER_RADIUS]
@@ -158,7 +164,7 @@ class FeedEntry:
 
     def __repr__(self):
         """Return string representation of this entry."""
-        return '<{}(id={})>'.format(self.__class__.__name__, self.external_id)
+        return "<{}(id={})>".format(self.__class__.__name__, self.external_id)
 
     @property
     def geometry(self):
@@ -193,7 +199,8 @@ class FeedEntry:
     def distance_to_home(self):
         """Return the distance in km of this entry to the home coordinates."""
         return GeoJsonDistanceHelper.distance_to_geometry(
-            self._home_coordinates, self.geometry)
+            self._home_coordinates, self.geometry
+        )
 
     def _search_in_feature(self, name):
         """Find an attribute in the feature object."""
@@ -203,8 +210,11 @@ class FeedEntry:
 
     def _search_in_properties(self, name):
         """Find an attribute in the feed entry's properties."""
-        if self._feature and self._feature.properties \
-                and name in self._feature.properties:
+        if (
+            self._feature
+            and self._feature.properties
+            and name in self._feature.properties
+        ):
             return self._feature.properties[name]
         return None
 
@@ -222,14 +232,12 @@ class GeoJsonDistanceHelper:
         latitude = longitude = None
         if isinstance(geometry, Point):
             # Just extract latitude and longitude directly.
-            latitude, longitude = geometry.coordinates[1], \
-                                  geometry.coordinates[0]
+            latitude, longitude = geometry.coordinates[1], geometry.coordinates[0]
         elif isinstance(geometry, GeometryCollection):
             # Go through the collection, and extract the first suitable
             # geometry.
             for entry in geometry.geometries:
-                latitude, longitude = \
-                    GeoJsonDistanceHelper.extract_coordinates(entry)
+                latitude, longitude = GeoJsonDistanceHelper.extract_coordinates(entry)
                 if latitude is not None and longitude is not None:
                     break
         elif isinstance(geometry, Polygon):
@@ -239,8 +247,9 @@ class GeoJsonDistanceHelper:
             number_of_points = len(geometry.coordinates[0])
             longitude = sum(longitudes_list) / number_of_points
             latitude = sum(latitudes_list) / number_of_points
-            _LOGGER.debug("Centroid of %s is %s", geometry.coordinates[0],
-                          (latitude, longitude))
+            _LOGGER.debug(
+                "Centroid of %s is %s", geometry.coordinates[0], (latitude, longitude)
+            )
         else:
             _LOGGER.debug("Not implemented: %s", type(geometry))
         return latitude, longitude
@@ -251,13 +260,16 @@ class GeoJsonDistanceHelper:
         distance = float("inf")
         if isinstance(geometry, Point):
             distance = GeoJsonDistanceHelper._distance_to_point(
-                home_coordinates, geometry)
+                home_coordinates, geometry
+            )
         elif isinstance(geometry, GeometryCollection):
             distance = GeoJsonDistanceHelper._distance_to_geometry_collection(
-                home_coordinates, geometry)
+                home_coordinates, geometry
+            )
         elif isinstance(geometry, Polygon):
             distance = GeoJsonDistanceHelper._distance_to_polygon(
-                home_coordinates, geometry.coordinates[0])
+                home_coordinates, geometry.coordinates[0]
+            )
         else:
             _LOGGER.debug("Not implemented: %s", type(geometry))
         return distance
@@ -267,18 +279,19 @@ class GeoJsonDistanceHelper:
         """Calculate the distance between home coordinates and the point."""
         # Swap coordinates to match: (latitude, longitude).
         return GeoJsonDistanceHelper._distance_to_coordinates(
-            home_coordinates, (point.coordinates[1], point.coordinates[0]))
+            home_coordinates, (point.coordinates[1], point.coordinates[0])
+        )
 
     @staticmethod
-    def _distance_to_geometry_collection(home_coordinates,
-                                         geometry_collection):
+    def _distance_to_geometry_collection(home_coordinates, geometry_collection):
         """Calculate the distance between home coordinates and the geometry
         collection."""
         distance = float("inf")
         for geometry in geometry_collection.geometries:
-            distance = min(distance,
-                           GeoJsonDistanceHelper.distance_to_geometry(
-                               home_coordinates, geometry))
+            distance = min(
+                distance,
+                GeoJsonDistanceHelper.distance_to_geometry(home_coordinates, geometry),
+            )
         return distance
 
     @staticmethod
@@ -289,10 +302,12 @@ class GeoJsonDistanceHelper:
         # to each point of the polygon but not to each edge of the
         # polygon; should be good enough
         for polygon_point in polygon:
-            distance = min(distance,
-                           GeoJsonDistanceHelper._distance_to_coordinates(
-                               home_coordinates,
-                               (polygon_point[1], polygon_point[0])))
+            distance = min(
+                distance,
+                GeoJsonDistanceHelper._distance_to_coordinates(
+                    home_coordinates, (polygon_point[1], polygon_point[0])
+                ),
+            )
         return distance
 
     @staticmethod
