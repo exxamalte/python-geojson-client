@@ -13,59 +13,75 @@ import re
 from typing import Optional, Dict
 
 from geojson_client import GeoJsonFeed, FeedEntry
-from geojson_client.consts import ATTR_GUID, ATTR_TITLE, ATTR_CATEGORY, \
-    ATTR_DESCRIPTION, ATTR_PUB_DATE, FILTER_CATEGORIES
+from geojson_client.consts import (
+    ATTR_GUID,
+    ATTR_TITLE,
+    ATTR_CATEGORY,
+    ATTR_DESCRIPTION,
+    ATTR_PUB_DATE,
+    FILTER_CATEGORIES,
+)
 from geojson_client.feed_manager import FeedManagerBase
 
 _LOGGER = logging.getLogger(__name__)
 
 ATTRIBUTION = "State of New South Wales (NSW Rural Fire Service)"
 
-CUSTOM_ATTRIBUTE = 'custom_attribute'
+CUSTOM_ATTRIBUTE = "custom_attribute"
 
-REGEXP_ATTR_COUNCIL_AREA = 'COUNCIL AREA: (?P<{}>[^<]+) <br'\
-    .format(CUSTOM_ATTRIBUTE)
-REGEXP_ATTR_FIRE = 'FIRE: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
-REGEXP_ATTR_LOCATION = 'LOCATION: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
-REGEXP_ATTR_RESPONSIBLE_AGENCY = 'RESPONSIBLE AGENCY: (?P<{}>[^<]+) <br'\
-    .format(CUSTOM_ATTRIBUTE)
-REGEXP_ATTR_SIZE = 'SIZE: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
-REGEXP_ATTR_STATUS = 'STATUS: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
-REGEXP_ATTR_TYPE = 'TYPE: (?P<{}>[^<]+) <br'.format(CUSTOM_ATTRIBUTE)
+REGEXP_ATTR_COUNCIL_AREA = "COUNCIL AREA: (?P<{}>[^<]+) <br".format(CUSTOM_ATTRIBUTE)
+REGEXP_ATTR_FIRE = "FIRE: (?P<{}>[^<]+) <br".format(CUSTOM_ATTRIBUTE)
+REGEXP_ATTR_LOCATION = "LOCATION: (?P<{}>[^<]+) <br".format(CUSTOM_ATTRIBUTE)
+REGEXP_ATTR_RESPONSIBLE_AGENCY = "RESPONSIBLE AGENCY: (?P<{}>[^<]+) <br".format(
+    CUSTOM_ATTRIBUTE
+)
+REGEXP_ATTR_SIZE = "SIZE: (?P<{}>[^<]+) <br".format(CUSTOM_ATTRIBUTE)
+REGEXP_ATTR_STATUS = "STATUS: (?P<{}>[^<]+) <br".format(CUSTOM_ATTRIBUTE)
+REGEXP_ATTR_TYPE = "TYPE: (?P<{}>[^<]+) <br".format(CUSTOM_ATTRIBUTE)
 
 URL = "https://www.rfs.nsw.gov.au/feeds/majorIncidents.json"
 
-VALID_CATEGORIES = ['Emergency Warning', 'Watch and Act', 'Advice',
-                    'Not Applicable']
+VALID_CATEGORIES = ["Emergency Warning", "Watch and Act", "Advice", "Not Applicable"]
 
 
 class NswRuralFireServiceFeedManager(FeedManagerBase):
     """Feed Manager for NSW Rural Fire Services feed."""
 
-    def __init__(self, generate_callback, update_callback, remove_callback,
-                 coordinates, filter_radius=None, filter_categories=None):
+    def __init__(
+        self,
+        generate_callback,
+        update_callback,
+        remove_callback,
+        coordinates,
+        filter_radius=None,
+        filter_categories=None,
+    ):
         """Initialize the NSW Rural Fire Services Feed Manager."""
-        feed = NswRuralFireServiceFeed(coordinates,
-                                       filter_radius=filter_radius,
-                                       filter_categories=filter_categories)
-        super().__init__(feed, generate_callback, update_callback,
-                         remove_callback)
+        feed = NswRuralFireServiceFeed(
+            coordinates,
+            filter_radius=filter_radius,
+            filter_categories=filter_categories,
+        )
+        super().__init__(feed, generate_callback, update_callback, remove_callback)
 
 
 class NswRuralFireServiceFeed(GeoJsonFeed):
     """NSW Rural Fire Services feed."""
 
-    def __init__(self, home_coordinates, filter_radius=None,
-                 filter_categories=None):
+    def __init__(self, home_coordinates, filter_radius=None, filter_categories=None):
         """Initialise this service."""
         super().__init__(home_coordinates, URL, filter_radius=filter_radius)
         self._filter_categories = filter_categories
 
     def __repr__(self):
         """Return string representation of this feed."""
-        return '<{}(home={}, url={}, radius={}, categories={})>'.format(
-            self.__class__.__name__, self._home_coordinates, self._url,
-            self._filter_radius, self._filter_categories)
+        return "<{}(home={}, url={}, radius={}, categories={})>".format(
+            self.__class__.__name__,
+            self._home_coordinates,
+            self._url,
+            self._filter_radius,
+            self._filter_categories,
+        )
 
     def _new_entry(self, home_coordinates, feature, global_data):
         """Generate a new entry."""
@@ -80,17 +96,18 @@ class NswRuralFireServiceFeed(GeoJsonFeed):
             else self._filter_categories
         )
         if filter_categories:
-            return list(filter(lambda entry:
-                               entry.category in filter_categories,
-                               entries))
+            return list(
+                filter(lambda entry: entry.category in filter_categories, entries)
+            )
         return entries
 
     def _extract_last_timestamp(self, feed_entries):
         """Determine latest (newest) entry from the filtered feed."""
         if feed_entries:
-            dates = sorted(filter(
-                None, [entry.publication_date for entry in feed_entries]),
-                reverse=True)
+            dates = sorted(
+                filter(None, [entry.publication_date for entry in feed_entries]),
+                reverse=True,
+            )
             return dates[0]
         return None
 
@@ -129,8 +146,9 @@ class NswRuralFireServiceFeedEntry(FeedEntry):
         if publication_date:
             # Parse the date. Example: 15/09/2018 9:31:00 AM
             date_struct = strptime(publication_date, "%d/%m/%Y %I:%M:%S %p")
-            publication_date = datetime.fromtimestamp(calendar.timegm(
-                date_struct), tz=pytz.utc)
+            publication_date = datetime.fromtimestamp(
+                calendar.timegm(date_struct), tz=pytz.utc
+            )
         return publication_date
 
     @property
@@ -169,7 +187,7 @@ class NswRuralFireServiceFeedEntry(FeedEntry):
     @property
     def fire(self) -> bool:
         """Return if this entry represents a fire or not."""
-        return self._search_in_description(REGEXP_ATTR_FIRE) == 'Yes'
+        return self._search_in_description(REGEXP_ATTR_FIRE) == "Yes"
 
     @property
     def size(self) -> str:

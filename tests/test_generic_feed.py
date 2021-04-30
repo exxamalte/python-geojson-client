@@ -17,14 +17,15 @@ class TestGenericFeed(unittest.TestCase):
     def test_update_ok(self, mock_session, mock_request):
         """Test updating feed is ok."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = load_fixture('generic_feed_1.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("generic_feed_1.json")
+        )
 
         feed = GenericFeed(home_coordinates, None)
-        assert repr(feed) == "<GenericFeed(home=(-31.0, 151.0), url=None, " \
-                             "radius=None)>"
+        assert (
+            repr(feed) == "<GenericFeed(home=(-31.0, 151.0), url=None, " "radius=None)>"
+        )
         status, entries = feed.update()
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
@@ -58,10 +59,10 @@ class TestGenericFeed(unittest.TestCase):
     def test_update_ok_with_filtering(self, mock_session, mock_request):
         """Test updating feed is ok."""
         home_coordinates = (-37.0, 150.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = load_fixture('generic_feed_1.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("generic_feed_1.json")
+        )
 
         feed = GenericFeed(home_coordinates, None, filter_radius=90.0)
         status, entries = feed.update()
@@ -77,13 +78,13 @@ class TestGenericFeed(unittest.TestCase):
     def test_update_ok_with_filtering_override(self, mock_session, mock_request):
         """Test updating feed is ok."""
         home_coordinates = (-37.0, 150.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = load_fixture('generic_feed_1.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("generic_feed_1.json")
+        )
 
         feed = GenericFeed(home_coordinates, None, filter_radius=90.0)
-        status, entries = feed.update_override({'radius': 80.0})
+        status, entries = feed.update_override({"radius": 80.0})
         assert status == UPDATE_OK
         self.assertIsNotNone(entries)
         assert len(entries) == 1
@@ -94,8 +95,7 @@ class TestGenericFeed(unittest.TestCase):
     def test_update_error(self, mock_session, mock_request):
         """Test updating feed results in error."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = False
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = False
 
         feed = GenericFeed(home_coordinates, None)
         status, entries = feed.update()
@@ -107,8 +107,9 @@ class TestGenericFeed(unittest.TestCase):
     def test_update_with_request_exception(self, mock_session, mock_request):
         """Test updating feed raises exception."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .side_effect = requests.exceptions.RequestException
+        mock_session.return_value.__enter__.return_value.send.side_effect = (
+            requests.exceptions.RequestException
+        )
 
         feed = GenericFeed(home_coordinates, None)
         status, entries = feed.update()
@@ -120,8 +121,9 @@ class TestGenericFeed(unittest.TestCase):
     def test_update_with_json_decode_error(self, mock_session, mock_request):
         """Test updating feed raises exception."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .side_effect = JSONDecodeError("", "", 0)
+        mock_session.return_value.__enter__.return_value.send.side_effect = (
+            JSONDecodeError("", "", 0)
+        )
 
         feed = GenericFeed(home_coordinates, None)
         status, entries = feed.update()
@@ -133,10 +135,10 @@ class TestGenericFeed(unittest.TestCase):
     def test_feed_manager(self, mock_session, mock_request):
         """Test the feed manager."""
         home_coordinates = (-31.0, 151.0)
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = True
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = load_fixture('generic_feed_1.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = True
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("generic_feed_1.json")
+        )
 
         # This will just record calls and keep track of external ids.
         generated_entity_external_ids = []
@@ -155,12 +157,14 @@ class TestGenericFeed(unittest.TestCase):
             """Remove entity."""
             removed_entity_external_ids.append(external_id)
 
-        feed_manager = GenericFeedManager(_generate_entity, _update_entity,
-                                          _remove_entity, home_coordinates,
-                                          None)
-        assert repr(feed_manager) == "<GenericFeedManager(feed=<GenericFeed(" \
-                                     "home=(-31.0, 151.0), url=None, " \
-                                     "radius=None)>)>"
+        feed_manager = GenericFeedManager(
+            _generate_entity, _update_entity, _remove_entity, home_coordinates, None
+        )
+        assert (
+            repr(feed_manager) == "<GenericFeedManager(feed=<GenericFeed("
+            "home=(-31.0, 151.0), url=None, "
+            "radius=None)>)>"
+        )
         feed_manager.update()
         entries = feed_manager.feed_entries
         self.assertIsNotNone(entries)
@@ -200,8 +204,9 @@ class TestGenericFeed(unittest.TestCase):
         updated_entity_external_ids.clear()
         removed_entity_external_ids.clear()
 
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.text = load_fixture('generic_feed_2.json')
+        mock_session.return_value.__enter__.return_value.send.return_value.text = (
+            load_fixture("generic_feed_2.json")
+        )
 
         feed_manager.update()
         entries = feed_manager.feed_entries
@@ -225,8 +230,7 @@ class TestGenericFeed(unittest.TestCase):
         updated_entity_external_ids.clear()
         removed_entity_external_ids.clear()
 
-        mock_session.return_value.__enter__.return_value.send\
-            .return_value.ok = False
+        mock_session.return_value.__enter__.return_value.send.return_value.ok = False
 
         feed_manager.update()
         entries = feed_manager.feed_entries

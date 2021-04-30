@@ -11,12 +11,18 @@ from geojson_client.feed_manager import FeedManagerBase
 class GenericFeedManager(FeedManagerBase):
     """Feed Manager for GeoJSON feeds."""
 
-    def __init__(self, generate_callback, update_callback, remove_callback,
-                 coordinates, url, filter_radius=None):
+    def __init__(
+        self,
+        generate_callback,
+        update_callback,
+        remove_callback,
+        coordinates,
+        url,
+        filter_radius=None,
+    ):
         """Initialize the Generic Feed Manager."""
         feed = GenericFeed(coordinates, url, filter_radius=filter_radius)
-        super().__init__(feed, generate_callback, update_callback,
-                         remove_callback)
+        super().__init__(feed, generate_callback, update_callback, remove_callback)
 
 
 class GenericFeed(GeoJsonFeed):
