@@ -3,7 +3,7 @@ Generic GeoJSON feed.
 
 Support for generic GeoJSON feeds from various sources.
 """
-from geojson_client import GeoJsonFeed, FeedEntry
+from geojson_client import FeedEntry, GeoJsonFeed
 from geojson_client.consts import ATTR_GUID, ATTR_ID, ATTR_TITLE
 from geojson_client.feed_manager import FeedManagerBase
 

@@ -1,8 +1,9 @@
 """Test for the generic geojson feed."""
-import requests
 import unittest
 from json import JSONDecodeError
 from unittest import mock
+
+import requests
 
 from geojson_client import UPDATE_ERROR, UPDATE_OK
 from geojson_client.generic_feed import GenericFeed, GenericFeedManager

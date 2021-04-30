@@ -3,15 +3,15 @@ Base class for GeoJSON services.
 
 Fetches GeoJSON feed from URL to be defined by sub-class.
 """
-from datetime import datetime
-import geojson
 import logging
-
-import requests
-from geojson import Point, GeometryCollection, Polygon
-from haversine import haversine
+from datetime import datetime
 from json import JSONDecodeError
-from typing import Optional, Dict, Callable, List, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
+
+import geojson
+import requests
+from geojson import GeometryCollection, Point, Polygon
+from haversine import haversine
 
 from geojson_client.consts import FILTER_RADIUS
 

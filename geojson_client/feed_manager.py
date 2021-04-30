@@ -3,9 +3,9 @@ Base class for the feed manager.
 
 This allows managing feeds and their entries throughout their life-cycle.
 """
-from datetime import datetime
 import logging
-from typing import Optional, Dict, List
+from datetime import datetime
+from typing import Dict, List, Optional
 
 from geojson_client import UPDATE_OK, UPDATE_OK_NO_DATA
 

@@ -7,18 +7,18 @@ import datetime
 import logging
 from typing import Dict
 
-from geojson_client import GeoJsonFeed, FeedEntry
+from geojson_client import FeedEntry, GeoJsonFeed
 from geojson_client.consts import (
-    ATTR_TITLE,
-    ATTR_PLACE,
-    ATTR_ID,
-    ATTR_ATTRIBUTION,
-    ATTR_MAG,
-    ATTR_TIME,
-    ATTR_UPDATED,
     ATTR_ALERT,
-    ATTR_TYPE,
+    ATTR_ATTRIBUTION,
+    ATTR_ID,
+    ATTR_MAG,
+    ATTR_PLACE,
     ATTR_STATUS,
+    ATTR_TIME,
+    ATTR_TITLE,
+    ATTR_TYPE,
+    ATTR_UPDATED,
     FILTER_MINIMUM_MAGNITUDE,
 )
 from geojson_client.exceptions import GeoJsonException
