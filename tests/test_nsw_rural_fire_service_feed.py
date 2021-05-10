@@ -154,6 +154,19 @@ class TestNswRuralFireServiceFeed(unittest.TestCase):
         assert len(updated_entity_external_ids) == 1
         assert len(removed_entity_external_ids) == 2
 
+        # Simulate an update with overridden filters.
+        generated_entity_external_ids.clear()
+        updated_entity_external_ids.clear()
+        removed_entity_external_ids.clear()
+
+        feed_manager.update_override({"categories": ["Category 1"], "radius": 1000.0})
+        entries = feed_manager.feed_entries
+        self.assertIsNotNone(entries)
+        assert len(entries) == 1
+        assert len(generated_entity_external_ids) == 1
+        assert len(updated_entity_external_ids) == 0
+        assert len(removed_entity_external_ids) == 1
+
     def test_last_timestamp_empty(self):
         """Test last timestamp."""
         feed = NswRuralFireServiceFeed(None)

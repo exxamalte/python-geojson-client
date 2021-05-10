@@ -117,7 +117,7 @@ class UsgsEarthquakeHazardsProgramFeed(GeoJsonFeed):
 
     def _filter_entries_override(self, entries, filter_overrides: Dict = None):
         """Filter the provided entries."""
-        entries = super()._filter_entries_override(entries)
+        entries = super()._filter_entries_override(entries, filter_overrides)
         filter_minimum_magnitude = (
             filter_overrides[FILTER_MINIMUM_MAGNITUDE]
             if filter_overrides and FILTER_MINIMUM_MAGNITUDE in filter_overrides

@@ -89,7 +89,7 @@ class NswRuralFireServiceFeed(GeoJsonFeed):
 
     def _filter_entries_override(self, entries, filter_overrides: Dict = None):
         """Filter the provided entries."""
-        entries = super()._filter_entries_override(entries)
+        entries = super()._filter_entries_override(entries, filter_overrides)
         filter_categories = (
             filter_overrides[FILTER_CATEGORIES]
             if filter_overrides and FILTER_CATEGORIES in filter_overrides

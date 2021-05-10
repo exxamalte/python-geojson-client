@@ -152,3 +152,16 @@ class TestUsgsEarthquakeHazardsProgramFeed(unittest.TestCase):
         assert len(generated_entity_external_ids) == 0
         assert len(updated_entity_external_ids) == 1
         assert len(removed_entity_external_ids) == 2
+
+        # Simulate an update with two overridden filters.
+        generated_entity_external_ids.clear()
+        updated_entity_external_ids.clear()
+        removed_entity_external_ids.clear()
+
+        feed_manager.update_override({"minimum_magnitude": 1.0, "radius": 1000.0})
+        entries = feed_manager.feed_entries
+        self.assertIsNotNone(entries)
+        assert len(entries) == 2
+        assert len(generated_entity_external_ids) == 1
+        assert len(updated_entity_external_ids) == 1
+        assert len(removed_entity_external_ids) == 0
