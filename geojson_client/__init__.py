@@ -13,7 +13,7 @@ import requests
 from geojson import GeometryCollection, Point, Polygon
 from haversine import haversine
 
-from geojson_client.consts import FILTER_RADIUS
+from geojson_client.consts import FILTER_RADIUS, HTTP_ACCEPT_ENCODING_HEADER
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,7 +30,9 @@ class GeoJsonFeed:
         self._home_coordinates = home_coordinates
         self._filter_radius = filter_radius
         self._url = url
-        self._request = requests.Request(method="GET", url=url).prepare()
+        self._request = requests.Request(
+            method="GET", url=url, headers=HTTP_ACCEPT_ENCODING_HEADER
+        ).prepare()
         self._last_timestamp = None
 
     def __repr__(self):
