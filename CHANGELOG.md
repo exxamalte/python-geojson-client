@@ -1,5 +1,11 @@
 # Changes
 
+## 0.6 (23/05/2021)
+* Allow overriding filters on update (with backwards compatibility).
+* Add default `Accept-Encoding: deflate, gzip` request header.
+* Added Python 3.9 support.
+* Code housekeeping (black formatting, isort, flake8).
+
 ## 0.5 (21/10/2020)
 * Added Python 3.8 support.
 * Drop Python 3.5 support.

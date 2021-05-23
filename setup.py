@@ -1,18 +1,18 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 REQUIRES = [
-    'geojson>=2.4.0',
-    'haversine>=1.0.1',
-    'pytz>=2018.04',
-    'requests>=2.20.0',
+    "geojson>=2.4.0",
+    "haversine>=1.0.1",
+    "pytz>=2018.04",
+    "requests>=2.20.0",
 ]
 
 setup(
     name="geojson_client",
-    version="0.5",
+    version="0.6",
     author="Malte Franken",
     author_email="coding@subspace.de",
     description="A GeoJSON client library.",
@@ -28,5 +28,5 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    install_requires=REQUIRES
+    install_requires=REQUIRES,
 )
