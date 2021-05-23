@@ -22,3 +22,5 @@ ATTR_UPDATED = "updated"
 FILTER_CATEGORIES = "categories"
 FILTER_MINIMUM_MAGNITUDE = "minimum_magnitude"
 FILTER_RADIUS = "radius"
+
+HTTP_ACCEPT_ENCODING_HEADER = {"Accept-Encoding": "deflate, gzip"}
