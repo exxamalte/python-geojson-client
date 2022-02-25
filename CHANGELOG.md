@@ -1,5 +1,13 @@
 # Changes
 
+## 0.7 (25/02/2022)
+* Removed integration with NSW Rural Fire Service, please use async library https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents instead.
+* Added Python 3.10 support.
+* Removed Python 3.6 support.
+* Bumped library versions: black, flake8, isort.
+* General code improvements.
+* Migrated to github actions.
+
 ## 0.6 (23/05/2021)
 * Allow overriding filters on update (with backwards compatibility).
 * Add default `Accept-Encoding: deflate, gzip` request header.
