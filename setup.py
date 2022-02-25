@@ -1,7 +1,6 @@
-from setuptools import find_packages, setup
+import os
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+from setuptools import find_packages, setup
 
 NAME = "geojson_client"
 AUTHOR = "Malte Franken"
@@ -16,9 +15,17 @@ REQUIRES = [
     "requests>=2.20.0",
 ]
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+VERSION = {}
+with open(os.path.join(HERE, NAME, "__version__.py")) as f:
+    exec(f.read(), VERSION)  # pylint: disable=exec-used
+
 setup(
     name=NAME,
-    version="0.6",
+    version=VERSION["__version__"],
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     description=DESCRIPTION,
