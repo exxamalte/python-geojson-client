@@ -3,6 +3,12 @@ from setuptools import find_packages, setup
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+NAME = "geojson_client"
+AUTHOR = "Malte Franken"
+AUTHOR_EMAIL = "coding@subspace.de"
+DESCRIPTION = "A GeoJSON client library."
+URL = "https://github.com/exxamalte/python-geojson-client"
+
 REQUIRES = [
     "geojson>=2.4.0",
     "haversine>=1.0.1",
@@ -11,14 +17,14 @@ REQUIRES = [
 ]
 
 setup(
-    name="geojson_client",
+    name=NAME,
     version="0.6",
-    author="Malte Franken",
-    author_email="coding@subspace.de",
-    description="A GeoJSON client library.",
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/exxamalte/python-geojson-client",
+    url=URL,
     packages=find_packages(exclude=("tests*",)),
     classifiers=[
         "Programming Language :: Python :: 3.7",
