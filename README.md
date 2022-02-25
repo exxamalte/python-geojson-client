@@ -42,22 +42,7 @@ status, entries = feed.update()
 
 ### [NSW Rural Fire Service](https://www.rfs.nsw.gov.au/fire-information/fires-near-me)
 
-**Supported Filters**
-
-| Filter     |                     | Description |
-|------------|---------------------|-------------|
-| Radius     | `filter_radius`     | Radius in kilometers around the home coordinates in which events from feed are included. |
-| Categories | `filter_categories` | Array of category names. Only events with a category matching any of these is included. |
-
-**Example**
-```python
-from geojson_client.nsw_rural_fire_service_feed import NswRuralFireServiceFeed
-# Home Coordinates: Latitude: -33.0, Longitude: 150.0
-# Filter radius: 50 km
-# Filter categories: 'Advice'
-feed = NswRuralFireServiceFeed((-33.0, 150.0), filter_radius=50, filter_categories=['Advice'])
-status, entries = feed.update()
-```
+Please migrate to the async library https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents instead. 
 
 ### [U.S. Geological Survey Earthquake Hazards Program](https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php)
 
