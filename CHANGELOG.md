@@ -1,5 +1,8 @@
 # Changes
 
+## 0.8 (29/03/2022)
+* Removed unnecessary depdendency `pytz` (thanks @scop).
+
 ## 0.7 (25/02/2022)
 * Removed integration with NSW Rural Fire Service, please use async library https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents instead.
 * Added Python 3.10 support.
